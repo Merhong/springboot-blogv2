@@ -1,19 +1,16 @@
 package shop.mtcoding.blogv2.board;
 
-import java.sql.Timestamp;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import shop.mtcoding.blogv2.user.User;
 
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@NoArgsConstructor
 @Setter
 @Getter
 @Table(name = "board_tb")
@@ -31,5 +28,15 @@ public class Board {
     @ManyToOne
     private User user;
 
+    @CreationTimestamp // Insert 할때 시간을 적어준다.
     private Timestamp createdAt;
+
+    @Builder
+    public Board(Integer id, String title, String content, User user, Timestamp createdAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 }
