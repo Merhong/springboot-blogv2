@@ -25,8 +25,9 @@ public class Board {
     @Column(nullable = true, length = 10000)
     private String content;
 
-    @ManyToOne
-    private User user;
+    // fetch EAGER가 디폴트. Lazy는 조회를 하지 않는 것
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user; // 1+N
 
     @CreationTimestamp // Insert 할때 시간을 적어준다.
     private Timestamp createdAt;

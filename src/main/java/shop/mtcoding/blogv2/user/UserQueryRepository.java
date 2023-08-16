@@ -18,7 +18,7 @@ public class UserQueryRepository {
     public User findById(Integer id) {
         // // 쿼리 작성
         // Query query = em.createQuery("select u from User u where u.id = :id", User.class);
-        // // 변수 바인딩
+        // // 매핑
         // query.setParameter("id", id);
         // // 리턴 or 전송
         // return (User) query.getSingleResult();
