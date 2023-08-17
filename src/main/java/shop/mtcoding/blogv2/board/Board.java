@@ -25,7 +25,7 @@ public class Board {
     @Column(nullable = true, length = 10000)
     private String content;
 
-    // fetch EAGER가 디폴트. Lazy는 조회를 하지 않는 것
+    // fetch EAGER가 디폴트. Lazy는 필요없을때 조회 안한다!!!
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // 1+N
 

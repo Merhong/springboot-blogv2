@@ -3,18 +3,66 @@ package shop.mtcoding.blogv2.board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blogv2._core.util.Script;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    // 게시글 수정
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable Integer id, BoardRequest.UpdateDTO updateDTO) {
+        // where 데이터, body, session 값
+        // boardId로 해당 게시글을 찾는다.
+        // Board board = boardService.상세보기(id);
+        // 해당 게시글의 글을 수정한다.
+        boardService.글수정하기(id, updateDTO);
+        // 수정한뒤 홈페이지로 리디렉트
+        return "redirect:/board/" + id;
+    }
+
+    // 게시글 수정화면
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable Integer id, Model model) {
+        // boardId로 게시글 상세보기
+        Board board = boardService.상세보기(id);
+        // view로 뿌려주기 위해 request에 board를 담는다.
+        // request.setAttribute("board", board);
+        model.addAttribute("board", board); // request에 담는것과 동일하다.
+        // 다시 상세보기 화면으로 리턴
+        return "board/updateForm";
+    }
+
+    // 게시글 삭제
+    @PostMapping("/board/{id}/delete")
+    public @ResponseBody String delete(@PathVariable Integer id) {
+        // 인증검사
+
+        // 핵심 로직
+
+        boardService.글삭제하기(id);
+        // 삭제후 홈페이지로 리디렉트
+        return Script.href("/");
+
+
+    }
+
+    // 게시글 상세보기
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable Integer id, Model model) {
+        // TODO 댓글할때 수정, 엔티티보다 DTO를 만들어서 뿌려주는게 좋다.
+        Board board = boardService.상세보기(id);
+        // view에서 사용하기위해 매핑
+        model.addAttribute("board", board);
+        // 상세보기 화면 리턴
+        return "board/detail";
+    }
 
     // localhost:8080?page=1&keyword=바나나
     // index(), 홈페이지
@@ -38,8 +86,8 @@ public class BoardController {
 
     /* save() 저장 메서드, 글쓰기 완료 버튼에 매핑 */
     // 1. 데이터 받기 (O)
-    // 2. 인증 체크 TODO
-    // 3. 유효성 검사 TODO
+    // TODO 2. 인증 체크
+    // TODO 3. 유효성 검사
     // 4. 핵심로직 호출(서비스)
     // 5. view 또는 data 응답
     @PostMapping("/board/save")

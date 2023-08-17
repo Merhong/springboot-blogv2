@@ -28,6 +28,23 @@ public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Test
+    public void boardDeleteById_test() {
+        boardRepository.deleteById(1);
+        System.out.println(boardRepository.findById(1));
+    }
+
+    @Test
+    public void boardFindById_test() {
+        Optional<Board> boardOP = boardRepository.findById(1);
+        // Board가 존재하면 실행 (null 안정성)
+        if(boardOP.isPresent()) {
+            System.out.println("테스트 : board가 존재함");
+            Board board = boardOP.get();
+            board.getUser().getEmail(); // LazyLoading
+        }
+    }
+
     // EAGER로 설정하고 테스트하자. 아니면 에러뜸
     @Test
     public void findAll_paging_test() throws JsonProcessingException {
@@ -94,7 +111,7 @@ public class BoardRepositoryTest {
     } // rollback
 
     @Test
-    public void findById_test() {
+    public void userFindById_test() {
         Optional<User> userOP = userRepository.findById(3);
 
         if (userOP.isPresent()) {
