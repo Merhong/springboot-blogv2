@@ -6,7 +6,7 @@ public class Script {
     public static String back(String msg) {
         StringBuilder sb = new StringBuilder();
         sb.append("<script>");
-        sb.append("alert('"+msg+"');");
+        sb.append("alert('" + msg + "');");
         sb.append("history.back();");
         sb.append("</script>");
 
@@ -17,7 +17,7 @@ public class Script {
     public static String href(String url) {
         StringBuilder sb = new StringBuilder();
         sb.append("<script>");
-        sb.append("location.href='"+url+"';");
+        sb.append("location.href='" + url + "';");
         sb.append("history.back();");
         sb.append("</script>");
 
@@ -28,9 +28,20 @@ public class Script {
     public static String href(String url, String msg) {
         StringBuilder sb = new StringBuilder();
         sb.append("<script>");
-        sb.append("alert('"+msg+"');");
-        sb.append("location.href='"+url+"';");
+        sb.append("alert('" + msg + "');");
+        sb.append("location.href='" + url + "';");
         sb.append("history.back();");
+        sb.append("</script>");
+
+        return sb.toString();
+    }
+
+    // 홈페이지 이동
+    public static String home(String url, String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<script>");
+        sb.append("alert('" + msg + "');");
+        sb.append("location.href='" + url + "';");
         sb.append("</script>");
 
         return sb.toString();

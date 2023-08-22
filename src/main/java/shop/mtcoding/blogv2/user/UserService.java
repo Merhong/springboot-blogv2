@@ -59,4 +59,12 @@ public class UserService {
         return user;
         // 3. 트랜잭션 종료시 자동 flush @Transactional
     }
+
+    public User 유저네임중복체크(String username) {
+        // 1. 조회 = 영속화
+        // username이 같은게 있는지 조회
+        User user = userRepository.findByUsername(username);
+
+        return user;
+    }
 }

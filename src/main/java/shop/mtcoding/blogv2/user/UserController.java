@@ -1,11 +1,13 @@
 package shop.mtcoding.blogv2.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shop.mtcoding.blogv2._core.error.ex.MyException;
+import shop.mtcoding.blogv2._core.util.ApiUtil;
 import shop.mtcoding.blogv2._core.util.Script;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,20 @@ public class UserController {
 
     @Autowired
     private HttpSession session;
+
+    // localhost:8080/check?username=ssar
+    // AJAX 통신, 뷰가 아닌 데이터를 전송
+    // 유저네임 중복체크 -> 회원가입시 체크, JavaScript로 받아서 사용
+    @GetMapping("/check")
+    public @ResponseBody ApiUtil<String> check(String username) {
+        User user = userService.유저네임중복체크(username);
+
+        if (user != null) {
+            return new ApiUtil<String>(false, "유저네임이 중복되었습니다.");
+        }
+        return new ApiUtil<String>(true, "유저네임을 사용할 수 있습니다.");
+
+    }
 
     // 회원가입 페이지
     // C-V 작동
@@ -53,7 +69,7 @@ public class UserController {
         // 로그인 성공시 session에 sessionUser 정보를 담는다.
         session.setAttribute("sessionUser", sessionUser);
         // 로그인 후 홈페이지로 리디렉트
-        return Script.href("/");
+        return Script.home("/", "로그인 했습니다");
     }
 
     // 회원정보 상세보기
@@ -95,6 +111,6 @@ public class UserController {
     public @ResponseBody String logout() {
         session.invalidate(); // 세션 무효화(삭제)
 
-        return Script.href("/", "로그아웃 했습니다.");
+        return Script.home("/", "로그아웃 했습니다.");
     }
 }

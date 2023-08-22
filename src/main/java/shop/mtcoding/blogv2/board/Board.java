@@ -39,7 +39,8 @@ public class Board {
     // ManyToOne : Eager가 디폴트
     // OneToMany : Lazy가 디폴트
     @JsonIgnoreProperties({"board"}) // 자기를 다시 참조 못하게 막음, 무한 참조 방지
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    // @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 게시글 삭제시 참조하고 있는 댓글 모두 삭제됨
     private List<Reply> replies = new ArrayList<>();
 
     @CreationTimestamp // Insert 할때 시간을 적어준다.

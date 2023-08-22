@@ -11,14 +11,17 @@ import shop.mtcoding.blogv2._core.util.Script;
 @RestControllerAdvice // 데이터를 응답함 이게 없으면 @ResponseBody를 각각 붙여줘야 함.
 public class MyExceptionHandler {
 
+    // 일반적인 예외처리
     @ExceptionHandler(MyException.class)
     public String error(MyException e) {
         return Script.back(e.getMessage());
-        // return "Exception Handler에서 처리된거임@@@@";
     }
 
+    // API 예외처리
     @ExceptionHandler(MyApiException.class)
     public ApiUtil<String> error(MyApiException e) {
         return new ApiUtil<String>(false, e.getMessage());
     }
 }
+
+

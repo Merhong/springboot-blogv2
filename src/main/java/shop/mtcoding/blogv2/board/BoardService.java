@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blogv2._core.error.ex.MyException;
+import shop.mtcoding.blogv2.reply.ReplyRepository;
+import shop.mtcoding.blogv2.reply.ReplyService;
 import shop.mtcoding.blogv2.user.User;
 
 import java.util.Optional;
@@ -24,6 +26,9 @@ public class BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
     // Update, Create, Insert는 @Transacional을 붙여줘야한다.
     @Transactional
