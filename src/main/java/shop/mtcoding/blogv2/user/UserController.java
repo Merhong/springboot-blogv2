@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import shop.mtcoding.blogv2._core.error.ex.MyException;
 import shop.mtcoding.blogv2._core.util.Script;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,12 +50,6 @@ public class UserController {
         // 로그인
         // userService의 로그인 메서드 호출하여 로그인
         User sessionUser = userService.로그인(loginDTO);
-        // 위의 결과가 null이면 실행
-        if (sessionUser == null) {
-            // return Script.href("/loginForm","로그인 실패");
-            // JavaScript 사용 뒤로가기 및 alert() 실행
-            return Script.back("로그인 실패");
-        }
         // 로그인 성공시 session에 sessionUser 정보를 담는다.
         session.setAttribute("sessionUser", sessionUser);
         // 로그인 후 홈페이지로 리디렉트

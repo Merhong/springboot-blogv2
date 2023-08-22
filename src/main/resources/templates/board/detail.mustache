@@ -2,53 +2,97 @@
 
 <div class="container p-5">
 
-    <!-- 수정삭제버튼 -->
-    <div class="d-flex justify-content-end">
-        <a class="btn btn-warning me-1" href="/board/{{board.id}}/updateForm">수정</a>
-        <form action="/board/{{board.id}}/delete" method="post">
-            <button type="submit" class="btn btn-danger">삭제</button>
-        </form>
-    </div>
+	<!-- 수정삭제버튼 -->
+	<div class="d-flex justify-content-end">
+		<a class="btn btn-warning me-1" href="/board/{{board.id}}/updateForm">수정</a>
+		<form action="/board/{{board.id}}/delete" method="post">
+			<button type="submit" class="btn btn-danger">삭제</button>
+		</form>
+	</div>
 
-    <!-- 게시글내용 -->
-    <div>
-        <h2><b>{{board.title}}</b></h2>
-        <hr />
-        <div class="m-4 p-2">
-            {{board.content}}
-        </div>
-    </div>
+	<!-- 게시글내용 -->
+	<div>
+		<h2><b>{{board.title}}</b></h2>
+		<hr/>
+		<div class="m-4 p-2">
+			{{board.content}}
+		</div>
+	</div>
 
-    <!-- 댓글 -->
-    <div class="card mt-3">
-        <!-- 댓글등록 -->
-        <div class="card-body">
-            <form action="#">
-                <input type="hidden" name="boardId">
-                <textarea class="form-control" rows="2" name="comment"></textarea>
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-primary mt-1">댓글등록</button>
-                </div>
-            </form>
-        </div>
+	<!-- 댓글 -->
+	<div class="card mt-3">
+		<!-- 댓글등록 -->
+		<div class="card-body">
+			<form>
+				<input type="hidden" id="boardId" value="{{board.id}}">
+				<textarea class="form-control" rows="2" id="comment"></textarea>
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-outline-primary mt-1" onclick="saveReply()">댓글등록</button>
+				</div>
+			</form>
+		</div>
 
-        <!-- 댓글목록 -->
-        <div class="card-footer">
-            <b>댓글리스트</b>
-        </div>
-        <div class="list-group">
-            <!-- 댓글아이템 -->
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="d-flex">
-                    <div class="px-1 me-1 bg-primary text-white rounded">ssar</div>
-                    <div>댓글1</div>
-                </div>
-                <form action="#">
-                    <button class="btn">🗑</button>
-                </form>
-            </div>
-        </div>
-    </div>
+		<!-- 댓글목록 -->
+		<div class="card-footer">
+			<b>댓글리스트</b>
+			<div class="list-group">
+				{{#board.replies}}
+					<!-- 댓글아이템 -->
+					<div class="list-group-item d-flex justify-content-between align-items-center">
+						<div class="d-flex">
+							<div class="px-1 me-1 bg-primary text-white rounded">{{user.username}}</div>
+							<div>{{comment}}</div>
+						</div>
+						<form>
+							<input type="hidden" name="boardId" value="{{board.id}}">
+							<button type="button" class="btn" onclick="deleteReply('{{id}}')">🗑</button>
+						</form>
+					</div>
+				{{/board.replies}}
+			</div>
+
+		</div>
+	</div>
 </div>
+
+<script>
+	async function deleteReply(id) {
+		let response = await fetch(`/api/reply/${id}/delete`, {
+			method: "delete"
+		});
+		let responseBody = await response.json(); // JSON으로 응답
+		if (responseBody.success) {
+			location.reload();
+		} else {
+            alert(responseBody.data);
+		}
+	}
+
+	async function saveReply() {
+		let requestBody = {
+			boardId: document.querySelector("#boardId").value,
+			comment: document.querySelector("#comment").value
+		};
+
+		console.log(requestBody);
+
+		let response = await fetch("/api/reply/save", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(requestBody)
+		});
+
+		let responseBody = await response.json();
+		console.log(responseBody);
+
+		if (responseBody.success) {
+			location.reload(); // SSR(새로고침)
+		} else {
+			alert(responseBody.data);
+		}
+	}
+</script>
 
 {{> layout/footer}}

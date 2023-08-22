@@ -2,15 +2,9 @@ package shop.mtcoding.blogv2.reply;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +27,12 @@ public class Reply {
     @Column(nullable = false, length = 100)
     private String comment;
 
-    @ManyToOne
+    // 댓글에 필요 없는 정보들을 안나오게 만듬
+    @JsonIgnoreProperties({"password", "email", "createdAt"})
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
     @CreationTimestamp // Insert 할때 시간을 적어준다.

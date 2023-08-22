@@ -32,4 +32,11 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Query(value = "update board_tb set title = :title, content = :content where id = :id", nativeQuery = true)
     void update(@Param("title") String title, @Param("content") String content, @Param("id") Integer id);
 
+    // 1. JPQL 사용
+    // 2. 이렇게 쓰면 DTO가 필요가 없다!!!
+    @Query("select b from Board b left join fetch b.replies r left join fetch r.user ru where b.id = :id")
+    Optional<Board> mFindByIdJoinRepliesInUser(@Param("id") Integer id);
+
+
+
 }

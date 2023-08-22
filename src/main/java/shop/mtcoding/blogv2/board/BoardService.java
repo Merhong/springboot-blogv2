@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blogv2._core.error.ex.MyException;
 import shop.mtcoding.blogv2.user.User;
 
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class BoardService {
     public Board 상세보기(Integer id) {
         // board만 가져오면 된다!!
         // TODO 예외처리 해줘야 함
-        return boardRepository.findById(id).get();
+        return boardRepository.mFindByIdJoinRepliesInUser(id).get();
     }
 
     @Transactional
@@ -53,9 +54,9 @@ public class BoardService {
         // TODO 없는 boardId가 들어왔을때의 처리
         try {
             // write는 예외처리 다잡기
-            boardRepository.deleteById(6);
+            boardRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("보드서비스 6번없음!!!");
+            throw new MyException(id + "는 찾을 수 없습니다.");
         }
     }
 
@@ -68,6 +69,8 @@ public class BoardService {
             Board board = boardOP.get();
             board.setTitle(updateDTO.getTitle());
             board.setContent(updateDTO.getContent());
+        } else {
+            throw new MyException(boardId + "는 찾을 수 없습니다.");
         }
         // boardRepository 사용
         // boardRepository.update(updateDTO.getTitle(), updateDTO.getContent(), boardId);

@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blogv2._core.util.Script;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Controller
 public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private BoardRepository boardRepository;
+
 
     // 게시글 수정
     @PostMapping("/board/{id}/update")
@@ -62,6 +67,13 @@ public class BoardController {
         model.addAttribute("board", board);
         // 상세보기 화면 리턴
         return "board/detail";
+    }
+
+    // 양방향 매핑, 무한참조 테스트용 메서드
+    @GetMapping("test/board/{id}")
+    public @ResponseBody Optional<Board> detail(@PathVariable Integer id) {
+        Optional<Board> board = boardRepository.mFindByIdJoinRepliesInUser(id);
+        return board;
     }
 
     // localhost:8080?page=1&keyword=바나나

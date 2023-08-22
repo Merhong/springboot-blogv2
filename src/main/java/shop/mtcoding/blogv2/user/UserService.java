@@ -3,6 +3,7 @@ package shop.mtcoding.blogv2.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blogv2._core.error.ex.MyException;
 
 // 핵심로직 처리, 트랜잭션 관리, 예외 처리
 @Service
@@ -29,12 +30,12 @@ public class UserService {
         User user = userRepository.findByUsername(loginDTO.getUsername());
         // 1. 유저네임 검증
         if (user == null) {
-            return null;
+            throw new MyException("유저네임이 없습니다.");
         }
         // 2. 패스워드 검증
         // 패스워드 비교시 같지 않으면 null, 같으면 통과
         if (!user.getPassword().equals(loginDTO.getPassword())) {
-            return null;
+            throw new MyException("패스워드가 틀렸습니다.");
         }
         // 3. 로그인 성공
         return user;

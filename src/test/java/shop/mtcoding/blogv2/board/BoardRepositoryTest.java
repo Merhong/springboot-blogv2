@@ -29,6 +29,24 @@ public class BoardRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
+    public void mFindByIdJoinUserAndJoinReply_test() {
+        Board board = boardRepository.mFindByIdJoinRepliesInUser(1).get();
+        System.out.println("board_id :" + board.getId());
+        System.out.println("board_title :" + board.getTitle());
+        System.out.println("board_content :" + board.getContent());
+        System.out.println("board_createAt :" + board.getCreatedAt());
+        System.out.println("=============================");
+        board.getReplies().stream().forEach(reply -> {
+            System.out.println("board_in_replies_id :" + reply.getId());
+            System.out.println("board_in_replies_comment :" + reply.getComment());
+            System.out.println("board_in_replies_user_id :" + reply.getUser().getId());
+            System.out.println("board_in_replies_user_username :" + reply.getUser().getUsername());
+        });
+        // System.out.println("board_user_id :" + board.getUser().getId());
+        // System.out.println("board_user_name :" + board.getUser().getUsername()); // Lazy Loading 발생
+    }
+
+    @Test
     public void boardDeleteById_test() {
         boardRepository.deleteById(1);
         System.out.println(boardRepository.findById(1));
@@ -38,7 +56,7 @@ public class BoardRepositoryTest {
     public void boardFindById_test() {
         Optional<Board> boardOP = boardRepository.findById(1);
         // Board가 존재하면 실행 (null 안정성)
-        if(boardOP.isPresent()) {
+        if (boardOP.isPresent()) {
             System.out.println("테스트 : board가 존재함");
             Board board = boardOP.get();
             board.getUser().getEmail(); // LazyLoading
@@ -49,7 +67,7 @@ public class BoardRepositoryTest {
     @Test
     public void findAll_paging_test() throws JsonProcessingException {
         Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "id");
-        Page<Board> boardPG =  boardRepository.findAll(pageable);
+        Page<Board> boardPG = boardRepository.findAll(pageable);
         ObjectMapper om = new ObjectMapper();
 
         // ObjectMapper는 boradPG 객체의 getter를 호출하면서 json을 만든다.

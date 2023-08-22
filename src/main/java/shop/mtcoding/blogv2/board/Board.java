@@ -1,14 +1,19 @@
 package shop.mtcoding.blogv2.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import shop.mtcoding.blogv2.reply.Reply;
 import shop.mtcoding.blogv2.user.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -26,8 +31,16 @@ public class Board {
     private String content;
 
     // fetch EAGER가 디폴트. Lazy는 필요없을때 조회 안한다!!!
+    @JsonIgnore // 게시글에 작성자의 정보는 없으니 JSON에 안나오게 만듬
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // 1+N
+
+    // 양방향 매핑 (반대방향에서 걸어준 것.)
+    // ManyToOne : Eager가 디폴트
+    // OneToMany : Lazy가 디폴트
+    @JsonIgnoreProperties({"board"}) // 자기를 다시 참조 못하게 막음, 무한 참조 방지
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    private List<Reply> replies = new ArrayList<>();
 
     @CreationTimestamp // Insert 할때 시간을 적어준다.
     private Timestamp createdAt;
