@@ -46,6 +46,11 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
+    public Page<Board> 게시글검색하기(String keyword, Integer page) {
+        Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+        return boardRepository.findByKeyword(keyword, pageable);
+    }
+
     public Board 상세보기(Integer id) {
         // board만 가져오면 된다!!
         // TODO 예외처리 해줘야 함

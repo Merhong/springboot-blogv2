@@ -83,13 +83,29 @@ public class BoardController {
                         @RequestParam(defaultValue = "") String keyword,
                         HttpServletRequest request) {
 
-        // 핵심로직
-        Page<Board> boardPG = boardService.게시글목록보기(page);
+        Page<Board> boardPG = null;
 
-        // 페이징
-        request.setAttribute("boardPG", boardPG);
-        request.setAttribute("prevPage", boardPG.getNumber() - 1);
-        request.setAttribute("nextPage", boardPG.getNumber() + 1);
+        // 핵심로직
+        if(keyword.isBlank()) { // Keyword가 없을때(공백 or Null값)
+            request.setAttribute("keyword", keyword);
+            boardPG = boardService.게시글목록보기(page);
+            request.setAttribute("boardPG", boardPG);
+            request.setAttribute("prevPage", boardPG.getNumber() - 1);
+            request.setAttribute("nextPage", boardPG.getNumber() + 1);
+        }
+        else { // keyword가 있을때
+            request.setAttribute("keyword", keyword);
+            boardPG = boardService.게시글검색하기(keyword, page);
+            request.setAttribute("boardPG", boardPG);
+            request.setAttribute("prevPage", boardPG.getNumber() - 1);
+            request.setAttribute("nextPage", boardPG.getNumber() + 1);
+        }
+        // boardPG = boardService.게시글목록보기(page);
+        //
+        // // 페이징
+        // request.setAttribute("boardPG", boardPG);
+        // request.setAttribute("prevPage", boardPG.getNumber() - 1);
+        // request.setAttribute("nextPage", boardPG.getNumber() + 1);
 
         // 위의 방법 대신 DTO에 담아서 request에 DTO만 연결시키는게 관리하기 좋다.
         return "index";

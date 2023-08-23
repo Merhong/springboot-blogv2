@@ -1,6 +1,7 @@
 package shop.mtcoding.blogv2.board;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +39,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Query("select b from Board b left join fetch b.replies r left join fetch r.user ru where b.id = :id")
     Optional<Board> mFindByIdJoinRepliesInUser(@Param("id") Integer id);
 
+
+    // 게시글 검색 쿼리
+    @Query("select b from Board b where b.title like %:keyword%")
+    Page<Board> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
