@@ -80,4 +80,5 @@ public class BoardService {
         // boardRepository 사용
         // boardRepository.update(updateDTO.getTitle(), updateDTO.getContent(), boardId);
     } // flush(더티체킹)
+
 }

@@ -25,10 +25,11 @@
 - 유저네임 중복체크(AJAX) A (8/22)
 - 페이징하기 B
 - 검색하기 B (8/22)
+- 회원가입시 Thumbnail 등록 (8/23)
 - 게시글 작성시 Thumbnail 등록 C (8/23)
 - 게시글 목록 Thumbnail 보기 C
 
-## 3단계
+## 3단계 (8/24)
 - 필터(Filter)
 - 유효성 검사(AOP)
 - 인증검사(Interceptor)

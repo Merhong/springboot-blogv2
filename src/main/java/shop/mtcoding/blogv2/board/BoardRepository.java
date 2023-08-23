@@ -1,5 +1,6 @@
 package shop.mtcoding.blogv2.board;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,7 +37,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     // 2. 이렇게 쓰면 DTO가 필요가 없다!!!
     @Query("select b from Board b left join fetch b.replies r left join fetch r.user ru where b.id = :id")
     Optional<Board> mFindByIdJoinRepliesInUser(@Param("id") Integer id);
-
-
 
 }

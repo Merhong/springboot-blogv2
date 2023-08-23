@@ -79,8 +79,14 @@ public class BoardController {
     // localhost:8080?page=1&keyword=바나나
     // index(), 홈페이지
     @GetMapping("/")
-    public String index(@RequestParam(defaultValue = "0") Integer page, HttpServletRequest request) {
+    public String index(@RequestParam(defaultValue = "0") Integer page,
+                        @RequestParam(defaultValue = "") String keyword,
+                        HttpServletRequest request) {
+
+        // 핵심로직
         Page<Board> boardPG = boardService.게시글목록보기(page);
+
+        // 페이징
         request.setAttribute("boardPG", boardPG);
         request.setAttribute("prevPage", boardPG.getNumber() - 1);
         request.setAttribute("nextPage", boardPG.getNumber() + 1);
