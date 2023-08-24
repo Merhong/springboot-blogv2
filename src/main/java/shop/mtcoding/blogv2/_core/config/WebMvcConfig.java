@@ -1,9 +1,11 @@
 package shop.mtcoding.blogv2._core.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
+import shop.mtcoding.blogv2._core.interceptor.LoginInterceptor;
 
 /**
  * static 폴더처럼 다른 폴더를 외부접근을 허용케 하는 설정
@@ -23,5 +25,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .setCachePeriod(10) // 10초 동안 캐시를 유지한다.
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/api/**")
+                .addPathPatterns("/user/update", "/user/updateForm")
+                .addPathPatterns("/board/**") // 발동 조건
+                .excludePathPatterns("/board/{id:[0-9]+}"); // 발동 제외
     }
 }

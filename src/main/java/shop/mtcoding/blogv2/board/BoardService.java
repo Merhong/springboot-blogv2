@@ -47,7 +47,7 @@ public class BoardService {
     }
 
     public Page<Board> 게시글검색하기(String keyword, Integer page) {
-        Pageable pageable = PageRequest.of(page, 3, Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, "id");
         return boardRepository.findByKeyword(keyword, pageable);
     }
 

@@ -27,7 +27,9 @@ public class Board {
 
     @Column(nullable = false, length = 100)
     private String title;
-    @Column(nullable = true, length = 10000)
+
+    @Lob
+    @Column(nullable = true)
     private String content;
 
     // fetch EAGER가 디폴트. Lazy는 필요없을때 조회 안한다!!!
